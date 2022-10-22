@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+  nodejs:
+    image: nodejs
+    container_name: node-web
+    restart: always
+    environment:
+      - name=value
+    ports:
+      - "80:8080"
+    networks:
+      - lemoncode-networks  
+  backend:
+    image: .net
+    depends_on:
+      - mongo
+networks:
+      lemoncode-challenge
