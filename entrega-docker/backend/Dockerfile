@@ -1,20 +1,28 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+FROM node:lts-alpine
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
-WORKDIR /src
-COPY backend/backend.csproj backend/
-RUN dotnet restore "backend/backend.csproj"
-COPY . .
-WORKDIR "/src/backend"
-RUN dotnet build "backend.csproj" -c Release -o /app/build
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
-FROM build AS publish
-RUN dotnet publish "backend.csproj" -c Release -o /app/publish
+# Create app directory
+# WORKDIR /usr/src/app
+WORKDIR /home/node/app 
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "backend.dll"]
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY --chown=node:node package*.json ./
+
+USER node
+
+RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
+
+# Bundle app source
+COPY --chown=node:node . .
+
+EXPOSE 5000
+# CMD [ "node", "server.js" ]
+
+
+# CMD [ "node", "app.js" ]
+CMD [ "npm", "start" ]
