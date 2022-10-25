@@ -1,4 +1,5 @@
 FROM node:lts-alpine
+# ENV NODE_ENV=production
 
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
@@ -13,9 +14,12 @@ COPY --chown=node:node package*.json ./
 
 USER node
 
-RUN npm install
+RUN npm install --silent
 # If you are building your code for production
 # RUN npm ci --only=production
+
+# RUN npm run build 
+
 
 # Bundle app source
 COPY --chown=node:node . .
@@ -24,5 +28,6 @@ EXPOSE 5000
 # CMD [ "node", "server.js" ]
 
 
-# CMD [ "node", "app.js" ]
-CMD [ "npm", "start" ]
+
+CMD [ "node", "dist/app.js" ]
+# CMD [ "npm", "start" ]
