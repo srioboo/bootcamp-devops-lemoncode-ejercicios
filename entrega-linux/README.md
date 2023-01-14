@@ -4,11 +4,11 @@
 
 **Enunciado:**
 Crea mediante comandos de bash la siguiente jerarquía de ficheros y directorios
- foo/
- ├─ dummy/
- │  ├─ file1.txt
- │  ├─ file2.txt
- ├─ empty/
+foo/
+├─ dummy/
+│ ├─ file1.txt
+│ ├─ file2.txt
+├─ empty/
 D onde file1.txt debe contener el siguiente texto:
 
 Me encanta la bash!!
@@ -36,14 +36,15 @@ El resultado de los comandos ejecutados sobre la jerarquía anterior deben dar e
 
 foo/
 ├─ dummy/
-│  ├─ file1.txt
+│ ├─ file1.txt
 ├─ empty/
-  ├─ file2.txt
+├─ file2.txt
 Donde file1.txt y file2.txt deben contener el siguiente texto:
 
 Me encanta la bash!!
 
 **Solución:**
+
 ```sh
 # volcado de texto y mover fichero
 cat foo/dummy/file1.ext >> foo/dummy/file2.txt && mv foo/dummy/file2.txt foo/empty/
@@ -101,14 +102,17 @@ La URL de dicha página web será una constante en el script.
 Si tras buscar la palabra no aparece en el fichero, se mostrará el siguiente mensaje:
 
 $ ejercicio4.sh patata
+
 > No se ha encontrado la palabra "patata"
-Si por el contrario la palabra aparece en la búsqueda, se mostrará el siguiente mensaje:
+> Si por el contrario la palabra aparece en la búsqueda, se mostrará el siguiente mensaje:
 
 $ ejercicio4.sh patata
+
 > La palabra "patata" aparece 3 veces
 > Aparece por primera vez en la línea 27
 
 **Solución**
+
 ```bash
 #!/bin/bash
 
@@ -131,7 +135,6 @@ fi
 
 ```
 
-
 ## Ejercicio 5 (Opcional)
 
 **Enunciado:**
@@ -140,14 +143,40 @@ Modifica el ejercicio anterior de forma que la URL de la página web se pase por
 Si al invocar el script este no recibe dos parámetros (URL y palabra a buscar), se deberá de mostrar el siguiente mensaje:
 
 $ ejercicio5.sh https://lemoncode.net/ patata 27
+
 > Se necesitan únicamente dos parámetros para ejecutar este script
-Además, si la palabra sólo se encuentra una vez en el fichero, se mostrará el siguiente mensaje:
+> Además, si la palabra sólo se encuentra una vez en el fichero, se mostrará el siguiente mensaje:
 
 $ ejercicio5.sh https://lemoncode.net/ patata
+
 > La palabra "patata" aparece 1 vez
 > Aparece únicamente en la línea 27
 
 **Solución:**
 
+```bash
+#!/bin/bash
 
+# verifica parametros
+if [ $# -ne 2 ]; then
+	echo "Se necesitan únicamente dos parámetros para ejecutar este script"
+else
+	# obtener la ruta
+	curl -s $1 -o temp.txt
 
+	# buscar la palabra en el fichero
+	if [ $# != 0 ]; then
+		COUNT=`grep $2 -c temp.txt`
+		FIRST_LINE=`grep -n $2 temp.txt | head -n1 | awk -F: '{ print $1 }'`
+		if [ $COUNT == 0 ]; then
+			echo "No se ha encontrado la palabra \"$2\""
+		elif [ $COUNT == 1 ]; then
+			echo "La palabra \"$2\" aparece $COUNT vez"
+			echo "Aparece unicamente en la línea $FIRST_LINE"
+		else
+			echo "La palabra \"$2\" se ha encontrado $COUNT veces"
+			echo "Aparece por primera vez en la línea $FIRST_LINE"
+		fi
+	fi
+fi
+```
