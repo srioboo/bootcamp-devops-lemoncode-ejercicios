@@ -1,27 +1,21 @@
-FROM node:lts-alpine
-
-# creacion de variables de entorno
-ENV DATABASE_URL=mongodb://some-mongo:27017
-ENV DATABASE_NAME=TopicstoreDb
-ENV HOST=topics-api
-ENV PORT=5000
-
-# crea el directorio de modulos y le da permisos adecuados
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+FROM node:16
 
 # Crea el directorio de la aplicacion
-WORKDIR /home/node/app 
+WORKDIR /usr/src/app
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY --chown=node:node package*.json ./
+COPY package*.json ./
+
+# hay que compiar el archivo de configuración
+COPY tsconfig.json ./
 
 # cambia al usuario node
-USER node
+# USER node
 
 # lanza la instalacion de npm
-RUN npm install --silent
+RUN npm install
 # If you are building your code for production
 # RUN npm ci --only=production
 
@@ -34,4 +28,5 @@ COPY --chown=node:node . .
 EXPOSE 5000
 
 # Ejecuta node dist/app.js para lanzar el servidor
-CMD [ "node", "dist/app.js" ]
+# CMD [ "node", "dist/app.js" ]
+CMD [ "npm", "start" ]

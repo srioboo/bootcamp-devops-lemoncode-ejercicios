@@ -13,7 +13,7 @@ RUN npm install
 # RUN npm ci --only=production
 
 # Bundle app source
-COPY . .
+COPY --chown=node:node . .
 
 EXPOSE 8080
 CMD [ "node", "server.js" ]

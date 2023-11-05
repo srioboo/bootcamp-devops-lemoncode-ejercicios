@@ -1,30 +1,33 @@
-## red
+# Solución Ejerciciós Docker
 
-docker network create lemoncode-challenge
+## Ejercicio 1
 
-### frontend
+Dockeriza la aplicación dentro de lemoncode-challenge, la cual está compuesta de 3 partes:
 
-docker build . -t srn/node-web-app # esto crea el build
-docker run -p 8080:3000 --env-file ./.env -d --name node-frontend -h node-frontend --network lemoncode-challenge srn/node-web-app
+- Un front-end con Node.js
+- Un backend en .NET que utiliza un MongoDB para almacenar la información.
+- El MongoDB donde se almacena la información en una base de.
 
-## node backend
+### Requisitos del ejercicio:
 
-docker build . -t srn/node-web-backend
-docker run -p 5000:5000 --env-file ./.env  -d --name topics-api -h topics-api --network lemoncode-challenge srn/node-web-backend
+1. Los tres componentes deben estar en una red llamada lemoncode-challenge.
+2. El backend debe comunicarse con el mongodb a través de esta URL mongodb://some-mongo:27017
+3. El front-end debe comunicarse con la api a través de http://topics-api:5000/api/topics
+4. El front-end debe estar mapeado con el host para ser accesible a través del puerto 8080.
+5. El MongoDB debe almacenar la información que va generando en un volumen, mapeado a la ruta /data/db.
+6. Este debe de tener una base de datos llamada TopicstoreDb con una colección llamada Topics. La colección Topics debe tener esta estructura: {"\_id":{"$oid":"5fa2ca6abe7a379ec4234883"},"Name":"Contenedores"} ¡Añade varios registros!
 
+**Tip para backend**: Antes de intentar contenerizar y llevar a cabo todos los pasos del ejercicio se recomienda intentar ejecutar la aplicación sin hacer cambios en ella. En este caso, lo único que es posible que “no tengamos a mano” es el MongoDB. Por lo que empieza por crear este en Docker, usa un cliente como el que vimos en el primer día de clase (MongoDB Compass) para añadir datos que pueda devolver la API.
 
-## mongo
+**Nota**: es más fácil si abres Visual Studio Code desde la carpeta backend para hacer las pruebas y las modificaciones que si te abres desde la raíz del repo. Para ejecutar este código solo debes lanzar dotnet run
 
-docker run -d -p 27017:27017 --name mongo --host some-mongo --network lemoncode-challenge mongo:latest
+**Tip para frontend**: Para ejecutar el frontend abre esta carpeta en VS Code y ejecuta primero npm install. Una vez instaladas las dependencias ya puedes ejecutarla con npm start. Debería de abrirse un navegador con lo siguiente:
 
-## mongo-express
+**Solución ejercicio 1:**
 
-docker run -it --rm \
- --network lemoncode-challenge \
- --name mongo-express \
- -p 8081:8081 \
- -e ME_CONFIG_OPTIONS_EDITORTHEME="ambiance" \
- -e ME_CONFIG_MONGODB_SERVER="mongo" \  
- -e ME_CONFIG_BASICAUTH_USERNAME="user" \
- -e ME_CONFIG_BASICAUTH_PASSWORD="password" \
- mongo-express
+Ir a:
+[Solución ejercicio 1](./EJERCICIO-1.md)
+
+## Ejercicio 2
+
+Ahora que ya tienes la aplicación del ejercicio 1 dockerizada, utiliza Docker Compose para lanzar todas las piezas a través de este. Debes plasmar todo lo necesario para que esta funcione como se espera: la red que utilizan, el volumen que necesita MongoDB, las variables de entorno, el puerto que expone la web y la API. Además debes indicar qué comandos utilizarías para levantar el entorno, pararlo y eliminarlo.
