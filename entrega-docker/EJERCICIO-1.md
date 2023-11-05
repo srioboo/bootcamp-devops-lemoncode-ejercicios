@@ -61,3 +61,6 @@ docker build . -t srn/node-web-app # esto crea el build
 docker run -p 8080:3000 --env-file ./.env -d --name node-frontend -h node-frontend --network lemoncode-challenge srn/node-web-app
 ```
 
+#### Paso 5: Entrar en la app
+
+Lanzar en el navegador http://localhost:8080/ y veremos los topics

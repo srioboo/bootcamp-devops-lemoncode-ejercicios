@@ -7,28 +7,16 @@ Ahora que ya tienes la aplicación del ejercicio 1 dockerizada, utiliza Docker C
 En el raíz del proyecto lanzar:
 
 ```shell
-docker compose up
+docker compose up -d
+```
+O para ejectuar el archivo usando los dockerfiles ejecutar
+
+```shell
+docker compose -f  docker-compose-dockerfiles.yml up -d
 ```
 
-El contenido del archivo docker sería:
+Esto ejecuta el contenido del archivo docker-compose.yml y genera los dockers necesarios
 
-```yaml
-version: "3.9"
-services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    depends_on:
-      - backend
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    depends_on:
-      - mongo
-  mongo:
-    image: mongo:latest
-networks:
-  lemoncode-challenge:
-```
+#### Paso 1: Entrar en la app
+
+Lanzar en el navegador http://localhost:8080/ y veremos los topics

@@ -4,12 +4,9 @@ services:
     container_name: frontend
     build:
       context: ./frontend
-    command: > 
-      sh -c "npm install && node server.js"
+      dockerfile: Dockerfile
     ports:
       - 8080:3000
-    expose: 
-      - 8080 
     environment:
       - API_URI=http://topics-api:5000/api/topics
     depends_on:
@@ -18,12 +15,9 @@ services:
     container_name: topics-api
     build:
       context: ./backend
-    command: > 
-      sh -c "npm install && npm start"  
+      dockerfile: Dockerfile
     ports:
       - 5000:5000
-    expose: 
-      - 5000
     environment:
       - DATABASE_URL=mongodb://some-mongo:27017
       - DATABASE_NAME=TopicstoreDb
@@ -33,11 +27,9 @@ services:
       - mongodb
   mongodb:
     container_name: some-mongo 
-    image: mongo:latest
     ports: 
       - 27017:27017
-    expose: 
-      - 27017
+    image: mongo:latest
     environment:
       - ME_CONFIG_OPTIONS_EDITORTHEME="ambiance"
       - ME_CONFIG_MONGODB_SERVER="some-mongo"
