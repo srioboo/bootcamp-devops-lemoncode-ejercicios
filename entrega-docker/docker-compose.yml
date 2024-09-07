@@ -1,15 +1,14 @@
-version: "3.9"
 services:
   frontend:
     container_name: frontend
     build:
       context: ./frontend
-    command: > 
+    command: >
       sh -c "npm install && node server.js"
     ports:
       - 8080:3000
-    expose: 
-      - 8080 
+    expose:
+      - 8080
     environment:
       - API_URI=http://topics-api:5000/api/topics
     depends_on:
@@ -18,11 +17,11 @@ services:
     container_name: topics-api
     build:
       context: ./backend
-    command: > 
-      sh -c "npm install && npm start"  
+    command: >
+      sh -c "npm install && npm start"
     ports:
       - 5000:5000
-    expose: 
+    expose:
       - 5000
     environment:
       - DATABASE_URL=mongodb://some-mongo:27017
@@ -32,11 +31,11 @@ services:
     depends_on:
       - mongodb
   mongodb:
-    container_name: some-mongo 
+    container_name: some-mongo
     image: mongo:latest
-    ports: 
+    ports:
       - 27017:27017
-    expose: 
+    expose:
       - 27017
     environment:
       - ME_CONFIG_OPTIONS_EDITORTHEME="ambiance"
@@ -47,5 +46,8 @@ services:
       - type: bind
         source: ./data
         target: $HOME/mongo/data
+      - type: bind
+        source: ./database/data/mongo-init.js
+        target: /docker-entrypoint-initdb.d/mongo-init.js
 networks:
   lemoncode-challenge:
