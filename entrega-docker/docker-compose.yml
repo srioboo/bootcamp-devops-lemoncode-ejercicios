@@ -43,11 +43,9 @@ services:
       - ME_CONFIG_BASICAUTH_USERNAME="user"
       - ME_CONFIG_BASICAUTH_PASSWORD="password"
     volumes:
-      - type: bind
-        source: ./data
-        target: $HOME/mongo/data
-      - type: bind
-        source: ./database/data/mongo-init.js
-        target: /docker-entrypoint-initdb.d/mongo-init.js
+      - ./database/data/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js # bind volume
+      - mongodata:/data/db # volume
 networks:
   lemoncode-challenge:
+volumes:
+  mongodata:
