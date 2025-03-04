@@ -31,7 +31,6 @@ COPY --from=builder ./build/wwwroot ./
 # Install production dependencies
 COPY package*.json ./
 
-# RUN npm ci --only=production
-RUN npm install --only=production
+RUN npm ci --only=production
 
 CMD [ "node", "app.js" ]

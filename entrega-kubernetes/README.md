@@ -8,7 +8,8 @@ TODO: subir la imagen a dockerhub
 
 ## Ejercicio 1
 
-### creación de los servicioes
+### creación de los servicios
+
 kubectl create deployment todo-app --image=jaimesalas/lc-todo-monolith
 
 kubectl create service loadbalancer load-balancer --tcp=3000:3000 -o yaml > balancer.yml
